@@ -28,7 +28,6 @@ class UserController extends Controller
             if ($mobile){
                 $encode = $request->get('encode');
                 $redisEncode = Redis::get('encode_'.$mobile);
-                dd($redisEncode);
                 if ($encode != $redisEncode){
                     return self::echojson(40004,'验证码错误，请重试！');
                 }
