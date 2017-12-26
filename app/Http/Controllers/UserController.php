@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
-use Flc\Alidayu\Client;
-use Flc\Alidayu\App;
-use Flc\Alidayu\Requests\AlibabaAliqinFcSmsNumSend;
-use Flc\Alidayu\Requests\IRequest;
+use Flc\Dysms\Client;
+use Flc\Dysms\Request\SendSms;
 use \Yunpian\Sdk\YunpianClient;
 
 class UserController extends Controller
@@ -119,27 +117,26 @@ class UserController extends Controller
 //            $r = $clnt->sms()->single_send($param);
 //            var_dump($r->code);
 //            exit;
-            /*
-            $config = [
+            /*$config = [
                 'app_key'    => 'LTAIToh9bjqalPEr',
                 'app_secret' => 'bSYMO1Gugw1AG2mu1btY6sfAM6hOVc',
                 // 'sandbox'    => true,  // 是否为沙箱环境，默认false
+            ];*/
+            $config = [
+                'accessKeyId'    => 'LTAIbVA2LRQ1tULr',
+                'accessKeySecret' => 'ocS48RUuyBPpQHsfoWokCuz8ZQbGxl',
             ];
-            $client = new Client(new App($config));
-            $req    = new AlibabaAliqinFcSmsNumSend;
 
-            $req->setRecNum('18310459359')
-                ->setSmsParam([
-                    'number' => rand(100000, 999999)
-                ])
-                ->setSmsFreeSignName('指尖跳跃')
-                ->setSmsTemplateCode('SMS_119081874');
+            $client  = new Client($config);
+            $sendSms = new SendSms;
+            $sendSms->setPhoneNumbers('13661148369');
+            $sendSms->setSignName('叶子坑');
+            $sendSms->setTemplateCode('SMS_77670013');
+            $sendSms->setTemplateParam(['code' => rand(100000, 999999)]);
+            $sendSms->setOutId('demo');
 
-            $resp = $client->execute($req);
-
-            print_r($resp);
-            exit;
-            */
+            print_r($client->execute($sendSms));
+            exit();
 
             return self::echojson(20000,'验证码请求成功', array('encode'=>$encode));
         } 
