@@ -118,8 +118,7 @@ class UserController extends Controller
             $clnt = YunpianClient::create('5c68c558dc020439d0826ce0c9135ecf');
             $param = [YunpianClient::MOBILE => $mobile,YunpianClient::TEXT => '【指尖跳跃】感谢您注册指尖跳跃，您的验证码是'.$encode];
             $r = $clnt->sms()->single_send($param);
-            $array = json_decode(json_encode($r),TRUE);
-            var_dump($array);
+            var_dump($r);
             exit;
             /*
             // 配置信息
