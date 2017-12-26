@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\User;
 use Flc\Dysms\Client;
 use Flc\Dysms\Request\SendSms;
-use \Yunpian\Sdk\YunpianClient;
+//use \Yunpian\Sdk\YunpianClient;
+use Illuminate\Support\Facades\Redis;
 
 class UserController extends Controller
 {
@@ -26,7 +27,9 @@ class UserController extends Controller
             $mobile = $request->get('mobile');
             if ($mobile){
                 $encode = $request->get('encode');
-                if ($encode != 888888){
+                $redisEncode = Redis::get('encode_'.$mobile);
+                dd($redisEncode);
+                if ($encode != $redisEncode){
                     return self::echojson(40004,'验证码错误，请重试！');
                 }
                 if(empty($mobile)){
@@ -44,7 +47,7 @@ class UserController extends Controller
                 }else{
                     $input['name'] = $mobile;
                     $input['email'] = 'z@it1.me'.':'.time();
-                    $input['password'] = MD5('1234556');
+                    $input['password'] = MD5('123456');
 
                     $res = User::create($input);
                     if($res){
@@ -111,6 +114,9 @@ class UserController extends Controller
         public function sendSms(Request $request){
             $mobile = $request->get('mobile');
             $encode = rand(1000,9999);
+            Redis::set('encode_'.$mobile, $encode);
+            Redis::expire('encode_'.$mobile, 300);
+
 //            $clnt = YunpianClient::create('5c68c558dc020439d0826ce0c9135ecf');
 //            $param = [YunpianClient::MOBILE => $mobile,YunpianClient::TEXT => '【指尖跳跃】感谢您注册指尖跳跃，您的验证码是'.$encode];
 //            $r = $clnt->sms()->single_send($param);
