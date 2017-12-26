@@ -114,14 +114,13 @@ class UserController extends Controller
         public function sendSms(Request $request){
             $mobile = $request->get('mobile');
             $encode = rand(1000,9999);
-            $request->session()->put($mobile.'_encode', $encode);
-            /*
+//            $request->session()->put($mobile.'_encode', $encode);
             $clnt = YunpianClient::create('5c68c558dc020439d0826ce0c9135ecf');
             $param = [YunpianClient::MOBILE => $mobile,YunpianClient::TEXT => '【指尖跳跃】感谢您注册指尖跳跃，您的验证码是'.$encode];
             $r = $clnt->sms()->single_send($param);
             $array = json_decode(json_encode($r),TRUE);
             var_dump($array);
-            exit;*/
+            exit;
             /*
             // 配置信息
             $config = [
