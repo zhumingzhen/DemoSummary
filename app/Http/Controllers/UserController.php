@@ -138,7 +138,7 @@ class UserController extends Controller
             $resp = $client->execute($req);
 
             print_r($resp);
-            print_r($resp->result->model);
+//            print_r($resp->result->model);
             exit;
             return self::echojson(20000,'验证码请求成功', array('encode'=>$encode));
         } 
