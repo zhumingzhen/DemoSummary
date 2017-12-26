@@ -28,8 +28,7 @@ class UserController extends Controller
             $mobile = $request->get('mobile');
             if ($mobile){
                 $encode = $request->get('encode');
-                $session_encode = $request->session()->get($mobile.'_encode');
-                if ($encode != $session_encode){
+                if ($encode != 888888){
                     return self::echojson(40004,'验证码错误，请重试！');
                 }
                 if(empty($mobile)){
@@ -114,7 +113,7 @@ class UserController extends Controller
         public function sendSms(Request $request){
             $mobile = $request->get('mobile');
             $encode = rand(1000,9999);
-            $request->session()->put($mobile.'_encode', $encode);
+            $encode = 888888;
 //            $clnt = YunpianClient::create('5c68c558dc020439d0826ce0c9135ecf');
 //            $param = [YunpianClient::MOBILE => $mobile,YunpianClient::TEXT => '【指尖跳跃】感谢您注册指尖跳跃，您的验证码是'.$encode];
 //            $r = $clnt->sms()->single_send($param);
