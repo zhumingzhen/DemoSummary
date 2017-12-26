@@ -128,7 +128,8 @@ class UserController extends Controller
             $sendSms->setTemplateCode('SMS_119081874');
             $sendSms->setTemplateParam(['code' => $encode]);
 
-            print_r($client->execute($sendSms));
+            $res = $client->execute($sendSms);
+            print_r($res->Message);
 //            $res = $client->execute($sendSms)->code;
 //            if ($res == 'OK'){
 //                return self::echojson(20000,'验证码请求成功');
