@@ -25,19 +25,52 @@ class UserController extends Controller
         }
 
         public function login(Request $request){
-            $name = $request->get('name');
-            $password = MD5($request->get('password'));
+            $mobile = $request->get('mobile');
+            if ($mobile){
+                $encode = $request->get('encode');
+                $session_encode = $request->session()->get($mobile.'_encode');
+                if ($encode != $session_encode){
+                    return self::echojson(40004,'验证码错误，请重试！');
+                }
+                if(empty($mobile)){
+                    return self::echojson(40005,'手机号不能为空！');
+                }
+                $isUserByMobile = User::where('name',$mobile)->first();
 
-            $isUserName = User::where('name',$name)->first();
-            if(!$isUserName){
-                return self::echojson(40000,'账号不存在');
-            }
+                if($isUserByMobile){
+                    $userData = User::where(['name'=>$mobile,'password'=>MD5('123456')])->first();
+                    if($userData){
+                        return self::echojson(20000,'手机快捷登录成功',$userData);
+                    }else{
+                        return self::echojson(40000,'手机快捷登录密码错误！');
+                    }
+                }else{
+                    $input['name'] = $mobile;
+                    $input['email'] = 'z@it1.me'.':'.time();
+                    $input['password'] = MD5('1234556');
 
-            $userData = User::where(['name'=>$name,'password'=>$password])->first();
-            if($userData){
-                return self::echojson(20000,'登录成功',$userData);
+                    $res = User::create($input);
+                    if($res){
+                        return self::echojson(20000,'手机快捷注册成功',$res);
+                    }else{
+                        return self::echojson(40000,'手机快捷注册失败，请稍后重试。');
+                    }
+                }
             }else{
-                return self::echojson(40000,'密码错误！');
+                $name = $request->get('name');
+                $password = MD5($request->get('password'));
+
+                $isUserName = User::where('name',$name)->first();
+                if(!$isUserName){
+                    return self::echojson(40000,'账号不存在');
+                }
+
+                $userData = User::where(['name'=>$name,'password'=>$password])->first();
+                if($userData){
+                    return self::echojson(20000,'登录成功',$userData);
+                }else{
+                    return self::echojson(40000,'密码错误！');
+                }
             }
         }
 
@@ -79,15 +112,16 @@ class UserController extends Controller
         }
 
         public function sendSms(Request $request){
-
             $mobile = $request->get('mobile');
             $encode = rand(1000,9999);
+            $request->session()->put($mobile.'_encode', $encode);
+            /*
             $clnt = YunpianClient::create('5c68c558dc020439d0826ce0c9135ecf');
             $param = [YunpianClient::MOBILE => $mobile,YunpianClient::TEXT => '【指尖跳跃】感谢您注册指尖跳跃，您的验证码是'.$encode];
             $r = $clnt->sms()->single_send($param);
             $array = json_decode(json_encode($r),TRUE);
             var_dump($array);
-            exit;
+            exit;*/
             /*
             // 配置信息
             $config = [
@@ -111,7 +145,7 @@ class UserController extends Controller
 //            print_r($resp->result->model);
             exit;
             */
-            return self::echojson(20000,'验证码请求成功');
+            return self::echojson(20000,'验证码请求成功', array('encode'=>$encode));
         } 
 
 }
