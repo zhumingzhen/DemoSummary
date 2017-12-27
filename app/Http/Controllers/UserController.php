@@ -122,15 +122,15 @@ class UserController extends Controller
 //            var_dump($r->code);
 //            exit;
             $config = [
-                'accessKeyId'    => 'LTAIToh9bjqalPEr',
-                'accessKeySecret' => 'bSYMO1Gugw1AG2mu1btY6sfAM6hOVc',
+                'accessKeyId'    => env('ACCESS_KEY_ID'),
+                'accessKeySecret' => env('ACCESS_KEY_SECRET'),
             ];
 
             $client  = new Client($config);
             $sendSms = new SendSms;
             $sendSms->setPhoneNumbers($mobile);
-            $sendSms->setSignName('指尖跳跃');
-            $sendSms->setTemplateCode('SMS_119081874');
+            $sendSms->setSignName(env('SIG_NAME'));
+            $sendSms->setTemplateCode(env('LOGIN_TEMPLATE_CODE'));
             $sendSms->setTemplateParam(['code' => $encode]);
 
             $res = $client->execute($sendSms);
