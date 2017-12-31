@@ -22,6 +22,6 @@ class MapController
         $url = "http://yingyan.baidu.com/api/v3/entity/search?ak=$ak&service_id=$service_id";
         $response = $http->get($url);
         $data = json_decode((string)$response->getBody(), true);
-        dd($data);
+        dd($data['entities']);
     }
 }
