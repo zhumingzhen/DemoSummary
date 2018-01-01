@@ -13,6 +13,9 @@ use GuzzleHttp\Client;
 
 class MapController
 {
+    /**
+     * 获取鹰眼轨迹在线用户
+     */
     public function yingyanSearch()
     {
 
