@@ -22,3 +22,5 @@ Route::get('register','UserController@register');
 Route::get('login','UserController@login');
 
 Route::get('sendsms','UserController@sendSms');
+
+Route::get('yingyanSearch','MapController@yingyanSearch');
