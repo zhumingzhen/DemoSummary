@@ -133,7 +133,7 @@ class UserController extends Controller
             $sendSms->setTemplateCode(env('LOGIN_TEMPLATE_CODE'));
             $sendSms->setTemplateParam(['code' => $encode]);
 
-//            $res = $client->execute($sendSms);
+            $res = $client->execute($sendSms);
             if ($res->Message == 'OK'){
                 return self::echojson(20000,'验证码请求成功');
             }else{
